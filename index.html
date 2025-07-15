@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pcc</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet" />
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #000;
+      overflow: hidden;
+      height: 100vh;
+      position: relative;
+    }
+
+    video#bg-video {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      object-fit: cover;
+      z-index: -1;
+      display: none;
+    }
+
+    .title {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: #ffffff;
+      font-size: 22px;
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 600;
+      cursor: pointer;
+      z-index: 3;
+      text-align: center;
+      text-shadow: 0 0 10px #000000, 0 0 20px #000000;
+      transition: all 0.3s ease-in-out;
+      user-select: none;
+    }
+
+    .title:hover {
+      color: #030303;
+      text-shadow: 0 0 15px #000000, 0 0 25px #000000, 0 0 40px #000000;
+      transform: translate(-50%, -50%) scale(1.05);
+    }
+
+    .container {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      display: none;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      gap: 50px;
+      z-index: 1;
+    }
+
+    .card {
+      width: 250px;
+      height: 300px;
+      background-color: #7a7a7a41;
+      border-radius: 15px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.2s ease;
+      transform-style: preserve-3d;
+      perspective: 1000px;
+      box-shadow: 0 0 30px rgba(168, 168, 168, 0.05);
+    }
+
+    .card:hover {
+      cursor: pointer;
+    }
+
+    .at-user__avatar {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      border: 2px solid #ffffff96;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+
+    .at-user__name {
+      font-size: 20px;
+      font-family: 'Montserrat', sans-serif;
+      color: #ffffffce;
+      font-weight: 700;
+      margin: 0;
+    }
+
+    .description {
+      font-size: 14px;
+      font-family: 'Montserrat', sans-serif;
+      color: #767573;
+      margin: 4px 0 0 0;
+    }
+
+    .badges {
+      display: flex;
+      gap: 5px;
+      margin-top: 10px;
+    }
+
+    .badge {
+      width: 24px;
+      height: 24px;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+
+    #audioControls {
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      display: none;
+      gap: 6px;
+      z-index: 10;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    #audioControls button {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      font-size: 20px;
+      color: white;
+      user-select: none;
+      width: 30px;
+      height: 30px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #audioControls button:first-child {
+      margin-bottom: 8px;
+    }
+
+    #volumeControls {
+      display: flex;
+      align-items: center;
+      gap: 2px; /* espaçamento reduzido */
+    }
+
+    #volumeControls button {
+      margin: 0;
+    }
+
+    #volumePercentage {
+      color: white;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      min-width: 40px;
+      text-align: left;
+      user-select: none;
+    }
+
+    #audioControls img {
+      width: 24px;
+      height: 24px;
+      display: block;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="title" id="playTrigger">i just need god</div>
+
+  <div id="audioControls">
+    <button id="toggleAudio" title="Ligar/Desligar Som">
+      <img id="toggleAudioImg"
+        src="https://cdn.discordapp.com/attachments/1264843755249340416/1394522920260337835/sound_on_inverted.png?ex=68771e2d&is=6875ccad&hm=eb26765551b4d601d8646499ad63780e6ea3a02807a04833a6768317e2fcb997&"
+        alt="Som Ligado" />
+    </button>
+    <div id="volumeControls">
+      <button id="decreaseVolume" title="Diminuir Volume">−</button>
+      <button id="increaseVolume" title="Aumentar Volume">+</button>
+      <span id="volumePercentage">20%</span>
+    </div>
+  </div>
+
+  <div class="container" id="cardContainer">
+    <a href="https://discord.com/users/324848070678413312" target="_blank" rel="noopener noreferrer"
+      style="text-decoration: none;">
+      <div class="card">
+        <img class="at-user__avatar"
+          src="https://cdn.discordapp.com/avatars/324848070678413312/4ad049ae30b378886f14520eb751b4f6.webp?size=1024"
+          alt="Avatar de cancoes">
+        <div class="at-user__name">sq</div>
+        <div class="description">@cancoes</div>
+        <div class="badges">
+          <div class="badge"
+            style="background-image: url('https://cdn.discordapp.com/attachments/1264843755249340416/1394513177349329057/Nitro_Silver_NoDot_Background.png?ex=6877151a&is=6875c39a&hm=9f6269145b73cde95dd14037ad925941add3307177b6e7740dd92f0b8c26271f&');"
+            title="Nitro prata"></div>
+          <div class="badge"
+            style="background-image: url('https://cdn.discordapp.com/emojis/1343930354062331914.webp?size=44');"
+            title="Boost Up nível 1"></div>
+          <div class="badge"
+            style="background-image: url('https://cdn.discordapp.com/emojis/1343930099598229575.webp?size=44');"
+            title="Missão"></div>
+        </div>
+      </div>
+    </a>
+    <a href="https://discord.com/users/663832640649953296" target="_blank" rel="noopener noreferrer"
+      style="text-decoration: none;">
+      <div class="card">
+        <img class="at-user__avatar"
+          src="https://cdn.discordapp.com/avatars/663832640649953296/53f6e35d4c955480a7011025e9ff07a0.webp?size=1024"
+          alt="Avatar de rafa">
+        <div class="at-user__name">kkj</div>
+        <div class="description">chorapv</div>
+        <div class="badges"></div>
+      </div>
+    </a>
+  </div>
+
+  <video id="bg-video" autoplay muted loop style="display:none;">
+    <source src="img/u.mp4" type="video/mp4">
+  </video>
+
+  <audio id="bg-music" loop>
+    <source
+      src="https://cdn.discordapp.com/attachments/1264843755249340416/1394198090487038052/SpotiDownloader.com_-_Embalo_-_Ryu.mp3?ex=68769867&is=687546e7&hm=2d524b8387b468347fa18ce05864243a6b6db838a68f66df7f82bc8478ab2d05&"
+      type="audio/mp3">
+  </audio>
+
+  <script>
+    const playTrigger = document.getElementById('playTrigger');
+    const bgMusic = document.getElementById('bg-music');
+    const bgVideo = document.getElementById('bg-video');
+    const audioControls = document.getElementById('audioControls');
+    const cardContainer = document.getElementById('cardContainer');
+
+    let playing = false;
+    let lastVolume = 0.2; // volume padrão inicial 20%
+
+    playTrigger.addEventListener('click', () => {
+      if (!playing) {
+        bgMusic.play();
+        bgVideo.style.display = 'block';
+        bgVideo.play();
+        cardContainer.style.display = 'flex';
+        audioControls.style.display = 'flex';
+        playTrigger.style.display = 'none';
+        playing = true;
+      } else {
+        bgMusic.pause();
+        bgVideo.pause();
+        bgVideo.style.display = 'none';
+        cardContainer.style.display = 'none';
+        audioControls.style.display = 'none';
+        playTrigger.style.display = 'block';
+        playing = false;
+      }
+    });
+
+    const toggleAudioBtn = document.getElementById('toggleAudio');
+    const toggleAudioImg = document.getElementById('toggleAudioImg');
+    const increaseVolumeBtn = document.getElementById('increaseVolume');
+    const decreaseVolumeBtn = document.getElementById('decreaseVolume');
+    const volumePercentage = document.getElementById('volumePercentage');
+
+    const audioOnImg =
+      'https://cdn.discordapp.com/attachments/1264843755249340416/1394522920260337835/sound_on_inverted.png?ex=68771e2d&is=6875ccad&hm=eb26765551b4d601d8646499ad63780e6ea3a02807a04833a6768317e2fcb997&';
+    const audioOffImg =
+      'https://cdn.discordapp.com/attachments/1264843755249340416/1394523092298109048/sound_off_inverted_2.png?ex=68771e56&is=6875ccd6&hm=bc449b3748a626143d5f7d56a55469498a0e77906b7e237831f3fe3710c48b36&';
+
+    // Define volume inicial em 20%
+    bgMusic.volume = 0.2;
+    bgMusic.muted = false;
+    toggleAudioImg.src = audioOnImg;
+    updateVolumeDisplay();
+
+    function updateVolumeDisplay() {
+      volumePercentage.textContent = Math.round(bgMusic.volume * 100) + '%';
+
+      // Atualiza ícone automaticamente conforme volume
+      if (bgMusic.volume === 0) {
+        toggleAudioImg.src = audioOffImg;
+      } else if (!bgMusic.muted) {
+        toggleAudioImg.src = audioOnImg;
+      }
+    }
+
+    toggleAudioBtn.addEventListener('click', () => {
+      if (!bgMusic.muted) {
+        // Guardar volume atual antes de silenciar
+        lastVolume = bgMusic.volume > 0 ? bgMusic.volume : lastVolume;
+        bgMusic.volume = 0;
+        bgMusic.muted = true;
+      } else {
+        // Restaurar volume antes de silenciar ou padrão
+        bgMusic.volume = lastVolume || 0.2;
+        bgMusic.muted = false;
+      }
+      updateVolumeDisplay();
+    });
+
+    increaseVolumeBtn.addEventListener('click', () => {
+      if (bgMusic.volume < 1) {
+        bgMusic.volume = Math.min(bgMusic.volume + 0.1, 1);
+        if (bgMusic.volume > 0) bgMusic.muted = false;
+        toggleAudioImg.src = audioOnImg;
+        updateVolumeDisplay();
+      }
+    });
+
+    decreaseVolumeBtn.addEventListener('click', () => {
+      if (bgMusic.volume > 0) {
+        bgMusic.volume = Math.max(bgMusic.volume - 0.1, 0);
+        if (bgMusic.volume === 0) {
+          bgMusic.muted = true;
+          toggleAudioImg.src = audioOffImg;
+        }
+        updateVolumeDisplay();
+      }
+    });
+  </script>
+
+</body>
+
+</html>
